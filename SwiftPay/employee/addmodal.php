@@ -1,0 +1,107 @@
+<?php
+// Fetch data for job positions
+$positionQuery = "SELECT * FROM jobposition";
+$positionResult = mysqli_query($con, $positionQuery);
+$jobposition = array();
+while ($positionRow = mysqli_fetch_assoc($positionResult)) {
+    $jobposition[] = $positionRow;
+}
+
+// Fetch data for departments
+$departmentQuery = "SELECT * FROM department";
+$departmentResult = mysqli_query($con, $departmentQuery);
+$department = array();
+while ($departmentRow = mysqli_fetch_assoc($departmentResult)) {
+    $department[] = $departmentRow;
+}
+
+// Fetch data for job statuses
+$jobstatusQuery = "SELECT * FROM jobstatus";
+$jobstatusResult = mysqli_query($con, $jobstatusQuery);
+$jobstatus = array();
+while ($jobstatusRow = mysqli_fetch_assoc($jobstatusResult)) {
+
+    $jobstatus[] = $jobstatusRow;
+}
+// Fetch data for deductions
+$deductionQuery = "SELECT * FROM deductions";
+$deductionResult = mysqli_query($con, $deductionQuery);
+$deductions = array();
+while ($deductionRow = mysqli_fetch_assoc($deductionResult)) {
+    $deductions[] = $deductionRow;
+}
+
+?>
+
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">Add Employee</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form id="addEmployeeForm" action="add_employee.php" method="post">
+                    <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hire_date">Hire Date</label>
+                        <input type="date" class="form-control" id="hire_date" name="hire_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="position_id">Position</label>
+                        <select class="form-control" id="position_id" name="position_id" required>
+                            <option value="">Select Position</option>
+                            <?php foreach ($jobposition as $position) { ?>
+                                <option value="<?php echo $position['position_id']; ?>"><?php echo $position['position_name']; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="department_id">Department</label>
+                        <select class="form-control" id="department_id" name="department_id" required>
+                            <option value="">Select Department</option>
+                            <?php foreach ($department as $dept) { ?>
+                                <option value="<?php echo $dept['department_id']; ?>"><?php echo $dept['department_name']; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="jobstatus_id">Job Status</label>
+                        <select class="form-control" id="jobstatus_id" name="jobstatus_id" required>
+                            <option value="">Select Job Status</option>
+                            <?php foreach ($jobstatus as $status) { ?>
+                                <option value="<?php echo $status['jobstatus_id']; ?>"><?php echo $status['jobstatus_name']; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="deduction_id">Deduction</label>
+                        <select class="form-control" id="deduction_id" name="deduction_id" required>
+                            <option value="">Select Deduction</option>
+                            <?php foreach ($deductions as $deduction) { ?>
+                                <option value="<?php echo $deduction['deduction_id']; ?>">
+                                    <?php echo $deduction['deduction_name'] . ' ($' . $deduction['deduction_amount'] . ')'; ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Employee</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
