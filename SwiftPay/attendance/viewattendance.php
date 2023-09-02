@@ -8,7 +8,7 @@ $searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
 $query = "SELECT * FROM attendance";
 
 if (!empty($searchTerm)) {
-    $query .= " WHERE employee_id LIKE '%$searchTerm%' OR time_in LIKE '%$searchTerm%' OR time_out LIKE '%$searchTerm%' OR hours_worked LIKE '%$searchTerm%'";
+    $query .= " WHERE employee_id LIKE '%$searchTerm%' OR time_in LIKE '%$searchTerm%' OR time_out LIKE '%$searchTerm%'";
 }
 
 $result = mysqli_query($con, $query);
@@ -18,6 +18,17 @@ $attendanceData = array();
 
 while ($row = mysqli_fetch_assoc($result)) {
     $attendanceData[] = $row;
+}
+
+// Function to calculate hours worked
+function calculateHoursWorked($timeIn, $timeOut) {
+    $startTime = strtotime($timeIn);
+    $endTime = strtotime($timeOut);
+
+    $secondsWorked = $endTime - $startTime;
+    $hoursWorked = $secondsWorked / 3600; // Convert seconds to hours
+
+    return number_format($hoursWorked, 2); // Format to two decimal places
 }
 ?>
 
@@ -69,9 +80,6 @@ while ($row = mysqli_fetch_assoc($result)) {
                     </a>
                 </div>
             </div>
-
-
-
         </div>
         <table class="table table-striped table-bordered table-hover">
             <thead class="thead-dark text-center">
@@ -96,14 +104,14 @@ while ($row = mysqli_fetch_assoc($result)) {
                             <?php echo $attendance['time_out']; ?>
                         </td>
                         <td>
-                            <?php echo $attendance['hours_worked']; ?>
+                            <?php
+                            // Calculate and display hours worked
+                            echo calculateHoursWorked($attendance['time_in'], $attendance['time_out']);
+                            ?>
                         </td>
                         <td class="text-center">
-
                             <a href="archive_process.php?attendance_id=<?php echo $attendance['attendance_id']; ?>"
                                 class="btn btn-danger btn-sm">Archive</a>
-
-
                         </td>
                     </tr>
                 <?php } ?>
@@ -112,35 +120,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     </div>
 
     <!-- Include Bootstrap JS (for any required functionality) -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js">
-        $(document).ready(function () {
-            // Handle form submission
-            $("form").submit(function (event) {
-                event.preventDefault(); // Prevent default form submission
-
-                var employee_id = $("#employee_id").val();
-                var time_in = $("#time_in").val();
-                var time_out = $("#time_out").val();
-
-                // AJAX request
-                $.ajax({
-                    url: "add_attendance.php",
-                    type: "POST",
-                    data: {
-                        employee_id: employee_id,
-                        time_in: time_in,
-                        time_out: time_out
-                    },
-                    success: function (response) {
-                        $("#responseMessage").html(response); // Display the response message
-                    },
-                    error: function () {
-                        $("#responseMessage").html("Error submitting form.");
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>

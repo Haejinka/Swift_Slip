@@ -3,6 +3,7 @@ include '../nav/nav_bar.php';
 include '../connect.php';
 
 
+
 // Fetch data from the attendance table
 $searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
 $query = "SELECT * FROM archive_attendance";
@@ -18,6 +19,7 @@ $attendanceData = array();
 
 while ($row = mysqli_fetch_assoc($result)) {
     $attendanceData[] = $row;
+    return number_format($hoursWorked, 2);
 }
 ?>
 
@@ -93,6 +95,10 @@ while ($row = mysqli_fetch_assoc($result)) {
                             <?php echo $attendance['hours_worked']; ?>
                         </td>
                         <td class="text-center">
+
+                        <a href="retrieve_process.php?attendance_id=<?php echo $attendance['attendance_id']; ?>"
+                                class="btn btn-success btn-sm">Retrieve</a>
+
 
                             <a href="delete_archive_attendance.php?attendance_id=<?php echo $attendance['attendance_id']; ?>"
                                 class="btn btn-danger btn-sm">Delete</a>

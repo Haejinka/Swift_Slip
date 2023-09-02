@@ -6,7 +6,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $checkInTime = $_POST['check_in_time'];
     $checkOutTime = $_POST['check_out_time'];
 
-
     $checkEmployeeQuery = "SELECT * FROM employee WHERE employee_id = $employeeID";
     $checkEmployeeResult = mysqli_query($con, $checkEmployeeQuery);
 
@@ -14,11 +13,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "<center>Employee does not exist.";
         exit(); // Stop further processing
     }
-    
 
-    // Use a prepared statement with parameter binding
-    $insertQuery = "INSERT INTO attendance (employee_id, time_in, time_out) VALUES ('$employeeID', '$checkInTime', '$checkOutTime')";
-    $insertResult = mysqli_query($con, $insertQuery);
+    // Calculate hours worked
+    $startTime = strtotime($checkInTime);
+    $endTime = strtotime($checkOutTime);
+    $secondsWorked = $endTime - $startTime;
+    $hoursWorked = $secondsWorked / 3600;
+
+    // Use a prepared statement with parameter binding to insert attendance with hours worked
+    $insertQuery = "INSERT INTO attendance (employee_id, time_in, time_out, hours_worked) VALUES (?, ?, ?, ?)";
+    $stmt = mysqli_prepare($con, $insertQuery);
+
+    // Bind parameters
+    mysqli_stmt_bind_param($stmt, "issd", $employeeID, $checkInTime, $checkOutTime, $hoursWorked);
+
+    // Execute the prepared statement
+    $insertResult = mysqli_stmt_execute($stmt);
 
     if ($insertResult) {
         header("Location: employee_attendance.php"); // Redirect back to the attendance list
