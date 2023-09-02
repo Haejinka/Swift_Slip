@@ -19,7 +19,7 @@ $attendanceData = array();
 
 while ($row = mysqli_fetch_assoc($result)) {
     $attendanceData[] = $row;
-    return number_format($hoursWorked, 2);
+    
 }
 ?>
 
