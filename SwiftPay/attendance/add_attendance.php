@@ -24,11 +24,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit(); // Stop further processing
     }
 
-    // Calculate hours worked
-    $start_time = strtotime($time_in);
-    $end_time = strtotime($time_out);
-    $seconds_worked = $end_time - $start_time;
-    $hours_worked = $seconds_worked / 3600;
+    // Fetch the employee's job status from the employee table
+    $employee = mysqli_fetch_assoc($checkEmployeeResult);
+    $jobstatus_id = $employee['jobstatus_id'];
+
+    // Check if the employee is on leave by querying the jobstatus table
+    $checkJobStatusQuery = "SELECT jobstatus_name FROM jobstatus WHERE jobstatus_id = ?";
+    $stmt = mysqli_prepare($con, $checkJobStatusQuery);
+
+    // Bind the jobstatus_id parameter
+    mysqli_stmt_bind_param($stmt, "i", $jobstatus_id);
+
+    // Execute the prepared statement
+    mysqli_stmt_execute($stmt);
+
+    // Get the result
+    $checkJobStatusResult = mysqli_stmt_get_result($stmt);
+
+    if ($row = mysqli_fetch_assoc($checkJobStatusResult)) {
+        $jobstatus_name = $row['jobstatus_name'];
+        
+        // Check if the employee is on leave
+        if ($jobstatus_name == 'On Leave') {
+            // Display a client-side alert
+            echo '<script>
+                alert("Employee is on leave and cannot make attendance.");
+                window.location.href = "viewattendance.php"; // Redirect back to the attendance table
+            </script>';
+            exit();
+        }
+    }
+
+    // Initialize hours worked to 0
+    $hours_worked = 0;
+
+    // Check if both "time_in" and "time_out" are not empty
+    if (!empty($time_in) && !empty($time_out)) {
+        // Calculate hours worked
+        $start_time = strtotime($time_in);
+        $end_time = strtotime($time_out);
+        $seconds_worked = $end_time - $start_time;
+        $hours_worked = $seconds_worked / 3600;
+    }
 
     // Insert the new attendance record into the database along with hours_worked using a prepared statement
     $insertQuery = "INSERT INTO attendance (employee_id, time_in, time_out, hours_worked) VALUES (?, ?, ?, ?)";
