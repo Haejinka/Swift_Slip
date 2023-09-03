@@ -24,7 +24,7 @@ $result = mysqli_query($con, $query);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SWIFT SLIP</title>
+    <title>Payroll</title>
 </head>
 <body>
 <div class="container mt-5">
