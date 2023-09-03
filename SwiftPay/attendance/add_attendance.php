@@ -24,6 +24,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit(); // Stop further processing
     }
 
+    // Fetch the employee's job status from the employee table
+    $employee = mysqli_fetch_assoc($checkEmployeeResult);
+    $jobstatus_id = $employee['jobstatus_id'];
+
+    // Check if the employee is on leave by querying the jobstatus table
+    $checkJobStatusQuery = "SELECT jobstatus_name FROM jobstatus WHERE jobstatus_id = ?";
+    $stmt = mysqli_prepare($con, $checkJobStatusQuery);
+
+    // Bind the jobstatus_id parameter
+    mysqli_stmt_bind_param($stmt, "i", $jobstatus_id);
+
+    // Execute the prepared statement
+    mysqli_stmt_execute($stmt);
+
+    // Get the result
+    $checkJobStatusResult = mysqli_stmt_get_result($stmt);
+
+    if ($row = mysqli_fetch_assoc($checkJobStatusResult)) {
+        $jobstatus_name = $row['jobstatus_name'];
+        
+        // Check if the employee is on leave
+        if ($jobstatus_name == 'On Leave') {
+            // Display a client-side alert
+            echo '<script>
+                alert("Employee is on leave and cannot make attendance.");
+                window.location.href = "viewattendance.php"; // Redirect back to the attendance table
+            </script>';
+            exit();
+        }
+    }
+
     // Initialize hours worked to 0
     $hours_worked = 0;
 

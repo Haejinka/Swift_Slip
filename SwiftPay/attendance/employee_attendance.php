@@ -5,6 +5,7 @@ if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
+
 date_default_timezone_set('Asia/Manila');
 include '../connect.php';
 include '../nav/employee_navbar.php';
@@ -14,6 +15,28 @@ $employeeID = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $employeeID = $_POST['employee_id'];
     $currentDate = date('Y-m-d'); // Current date
+
+    // Check if the employee is on leave
+    $checkLeaveQuery = "SELECT jobstatus_name FROM employee e
+                        JOIN jobstatus j ON e.jobstatus_id = j.jobstatus_id
+                        WHERE e.employee_id = ?";
+
+    $stmt = mysqli_prepare($con, $checkLeaveQuery);
+    mysqli_stmt_bind_param($stmt, "i", $employeeID);
+    mysqli_stmt_execute($stmt);
+    $leaveResult = mysqli_stmt_get_result($stmt);
+
+    if ($leaveRow = mysqli_fetch_assoc($leaveResult)) {
+        $jobstatus_name = $leaveRow['jobstatus_name'];
+
+        // Check if the employee is on leave (assuming 'On Leave' is the job status name)
+        if ($jobstatus_name == 'On Leave') {
+            echo '<script>alert("Employee is on leave and cannot make attendance.");
+            window.location.href = "employee_attendance.php";
+            </script>';
+            exit();
+        }
+    }
 
     if (isset($_POST['time_in'])) {
         // Check if the employee has already timed in today
