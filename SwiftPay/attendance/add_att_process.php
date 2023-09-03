@@ -14,27 +14,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit(); // Stop further processing
     }
 
-    // Calculate hours worked
-    $startTime = strtotime($checkInTime);
-    $endTime = strtotime($checkOutTime);
-    $secondsWorked = $endTime - $startTime;
-    $hoursWorked = $secondsWorked / 3600;
+    // Check if both check-in and check-out times are provided and not empty
+    if (!empty($checkInTime) && !empty($checkOutTime)) {
+        // Calculate hours worked
+        $startTime = strtotime($checkInTime);
+        $endTime = strtotime($checkOutTime);
+        $secondsWorked = $endTime - $startTime;
+        $hoursWorked = $secondsWorked / 3600;
+    }
 
-    // Use a prepared statement with parameter binding to insert attendance with hours worked
-    $insertQuery = "INSERT INTO attendance (employee_id, time_in, time_out, hours_worked) VALUES (?, ?, ?, ?)";
-    $stmt = mysqli_prepare($con, $insertQuery);
+    // Use an UPDATE statement to set hours_worked directly
+    $updateQuery = "UPDATE attendance SET hours_worked = ? WHERE employee_id = ? AND time_in = ?";
+    $stmt = mysqli_prepare($con, $updateQuery);
 
     // Bind parameters
-    mysqli_stmt_bind_param($stmt, "issd", $employeeID, $checkInTime, $checkOutTime, $hoursWorked);
+    mysqli_stmt_bind_param($stmt, "dis", $hoursWorked, $employeeID, $checkInTime);
 
     // Execute the prepared statement
-    $insertResult = mysqli_stmt_execute($stmt);
+    $updateResult = mysqli_stmt_execute($stmt);
 
-    if ($insertResult) {
+    if ($updateResult) {
         header("Location: employee_attendance.php"); // Redirect back to the attendance list
         exit();
     } else {
-        echo "Error adding attendance: " . mysqli_error($con);
+        echo "Error updating attendance: " . mysqli_error($con);
     }
 }
 ?>
