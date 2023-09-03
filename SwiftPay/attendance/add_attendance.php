@@ -24,11 +24,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit(); // Stop further processing
     }
 
-    // Calculate hours worked
-    $start_time = strtotime($time_in);
-    $end_time = strtotime($time_out);
-    $seconds_worked = $end_time - $start_time;
-    $hours_worked = $seconds_worked / 3600;
+    // Initialize hours worked to 0
+    $hours_worked = 0;
+
+    // Check if both "time_in" and "time_out" are not empty
+    if (!empty($time_in) && !empty($time_out)) {
+        // Calculate hours worked
+        $start_time = strtotime($time_in);
+        $end_time = strtotime($time_out);
+        $seconds_worked = $end_time - $start_time;
+        $hours_worked = $seconds_worked / 3600;
+    }
 
     // Insert the new attendance record into the database along with hours_worked using a prepared statement
     $insertQuery = "INSERT INTO attendance (employee_id, time_in, time_out, hours_worked) VALUES (?, ?, ?, ?)";
