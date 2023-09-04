@@ -24,28 +24,11 @@
                             ?>
                         </datalist>
                     </div>
-
-
-
                     <div class="form-group">
                         <label for="payTerm">Pay Term</label>
                         <select class="form-control" id="payTerm" name="pay_term">
                             <option value="FIRST HALF">First Half</option>
                             <option value="SECOND HALF">Second Half</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="deductionID">Deduction Name</label>
-                        <select class="form-control" id="deductionID" name="deduction_id">
-                            <option value="">Select Deduction</option>
-                            <?php
-                            $deductionQuery = "SELECT deduction_id, deduction_name FROM deductions";
-                            $deductionResult = mysqli_query($con, $deductionQuery);
-
-                            while ($deductionRow = mysqli_fetch_assoc($deductionResult)) {
-                                echo '<option value="' . $deductionRow['deduction_id'] . '">' . $deductionRow['deduction_name'] . '</option>';
-                            }
-                            ?>
                         </select>
                     </div>
                     

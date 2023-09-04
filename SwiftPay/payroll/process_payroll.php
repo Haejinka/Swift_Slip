@@ -11,14 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $employeeCheckResult = mysqli_query($con, $employeeCheckQuery);
     $employeeExists = mysqli_fetch_assoc($employeeCheckResult)['count'];
 
-    // Check if deduction_id exists in deductions table
-    $deductionCheckQuery = "SELECT COUNT(*) as count FROM deductions WHERE deduction_id = '$deductionId'";
-    $deductionCheckResult = mysqli_query($con, $deductionCheckQuery);
-    $deductionExists = mysqli_fetch_assoc($deductionCheckResult)['count'];
-
-    if ($employeeExists && $deductionExists) {
+    if ($employeeExists) {
         // Both employee_id and deduction_id exist, so insert the new payroll record
-        $insertQuery = "INSERT INTO payroll (employee_id, pay_term, deduction_id) VALUES ('$employeeId', '$payTerm', '$deductionId')";
+        $insertQuery = "INSERT INTO payroll (employee_id, pay_term) VALUES ('$employeeId', '$payTerm')";
         $insertResult = mysqli_query($con, $insertQuery);
 
         if ($insertResult) {
