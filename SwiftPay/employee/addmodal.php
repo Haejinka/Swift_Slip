@@ -86,12 +86,13 @@ while ($deductionRow = mysqli_fetch_assoc($deductionResult)) {
                     </div>
                     <div class="form-group">
                         <label for="deduction_id">Deduction</label>
-                        <select class="form-control" id="deduction_id" name="deduction_id" required>
+                        <select class="form-control" id="deduction_id" name="deduction_id[]" required multiple>
                             <option value="">Select Deduction</option>
                             <?php foreach ($deductions as $deduction) { ?>
                                 <option value="<?php echo $deduction['deduction_id']; ?>">
                                     <?php echo $deduction['deduction_name'] . ' ($' . $deduction['deduction_amount'] . ')'; ?>
                                 </option>
+                                
                             <?php } ?>
                         </select>
                     </div>
