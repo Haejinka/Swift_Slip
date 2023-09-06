@@ -6,7 +6,7 @@ include '../connect.php';
 if (isset($_GET['search'])) {
     $search = $_GET['search'];
     $search = mysqli_real_escape_string($con, $search); // Sanitize input
-    $search_query = " AND (p.payroll_id LIKE '%$search%' OR p.employee_id LIKE '%$search%' OR p.pay_date LIKE '%$search%' OR d.deduction_name LIKE '%$search%')";
+    $search_query = " AND (p.payroll_id LIKE '%$search%' OR p.employee_id LIKE '%$search%' OR p.pay_term LIKE '%$search%')";
 } else {
     $search_query = "";
 }
