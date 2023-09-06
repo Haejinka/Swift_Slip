@@ -11,15 +11,40 @@ if (isset($_GET['search'])) {
     $search_query = "";
 }
 
-$query = "SELECT p.*, SUM(d.deduction_amount) AS total_deduction
-          FROM payroll p
-          LEFT JOIN employee e ON p.employee_id = e.employee_id
-          LEFT JOIN deductions d ON FIND_IN_SET(d.deduction_id, e.deduction_id)
-          WHERE 1 $search_query
-          GROUP BY p.payroll_id";
+// Create a SELECT query to calculate total_percentage_deduction and total_fixed_deduction
+$selectQuery = "
+    SELECT
+        p.*,
+        SUM(CASE WHEN d.deduction_method = 'percentage' THEN d.deduction_amount ELSE 0 END) AS total_percentage_deduction,
+        SUM(CASE WHEN d.deduction_method = 'fixed' THEN d.deduction_amount ELSE 0 END) AS total_fixed_deduction
+    FROM payroll p
+    LEFT JOIN employee e ON p.employee_id = e.employee_id
+    LEFT JOIN deductions d ON FIND_IN_SET(d.deduction_id, e.deduction_id)
+    WHERE 1 $search_query
+    GROUP BY p.payroll_id
+";
 
-$result = mysqli_query($con, $query);
+$result = mysqli_query($con, $selectQuery);
+
+// Update the payroll table with the calculated values
+while ($row = mysqli_fetch_assoc($result)) {
+    $payrollId = $row['payroll_id'];
+    $totalPercentageDeduction = $row['total_percentage_deduction'];
+    $totalFixedDeduction = $row['total_fixed_deduction'];
+
+    // Update the payroll table with the calculated values
+    $updateQuery = "
+        UPDATE payroll
+        SET total_deduct_p = '$totalPercentageDeduction',
+            total_deduct_f = '$totalFixedDeduction'
+        WHERE payroll_id = '$payrollId'
+    ";
+
+    // Execute the update query
+    mysqli_query($con, $updateQuery);
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,7 +91,8 @@ $result = mysqli_query($con, $query);
                 <th>Payroll ID</th>
                 <th>Employee ID</th>
                 <th>Pay Term</th>
-                <th>Total Deduction (%)</th> <!-- Display the total deduction amount as a percentage -->
+                <th>Total Deduction (%)</th>
+                <th>Total Fixed Deduction</th> 
                 <th>Hours Worked</th>
                 <th>Hourly Rate</th>
                 <th>Gross Pay</th>
@@ -75,12 +101,18 @@ $result = mysqli_query($con, $query);
             </tr>
         </thead>
         <tbody>
-            <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+            <?php
+            // Re-run the updated query to calculate total_percentage_deduction and total_fixed_deduction
+            $result = mysqli_query($con, $selectQuery);
+
+            while ($row = mysqli_fetch_assoc($result)) {
+            ?>
             <tr>
                 <td><?php echo $row['payroll_id']; ?></td>
                 <td><?php echo $row['employee_id']; ?></td>
                 <td><?php echo $row['pay_term']; ?></td>
-                <td><?php echo $row['total_deduction'] . '%'; ?></td> <!-- Display the total deduction amount as a percentage -->
+                <td><?php echo $row['total_percentage_deduction'] . '%'; ?></td>
+                <td><?php echo $row['total_fixed_deduction']; ?></td>
                 <td><?php echo $row['hours_worked']; ?></td>
                 <td><?php echo $row['hourly_rate']; ?></td>
                 <td><?php echo $row['gross_pay']; ?></td>
@@ -95,10 +127,8 @@ $result = mysqli_query($con, $query);
 </div>
 <?php include 'payrollmodal.php';?>
 
-
 <!-- Add these scripts before the closing </body> tag -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 </body>
 </html>

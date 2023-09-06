@@ -32,11 +32,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["generate_payroll"])) 
 
     // Update gross and net pay
     $updateGrossNetQuery = "
-        UPDATE payroll p
-        JOIN deductions d ON p.deduction_id = d.deduction_id
-        SET p.gross_pay = p.hours_worked * p.hourly_rate,
-            p.net_pay = (p.hours_worked * p.hourly_rate) * (1 - d.deduction_amount)
-    ";
+    UPDATE payroll p
+    SET p.gross_pay = p.hours_worked * p.hourly_rate,
+        p.net_pay = (p.hours_worked * p.hourly_rate) - p.total_deduct_f - (p.hours_worked * p.hourly_rate * p.total_deduct_p)
+";
 
     // Execute the queries
     if (
