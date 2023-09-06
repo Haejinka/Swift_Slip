@@ -1,4 +1,5 @@
-<?php include '../nav/nav_bar.php';
+<?php
+include '../nav/nav_bar.php';
 // Include the database connection
 include '../connect.php';
 
@@ -54,72 +55,80 @@ while ($row = mysqli_fetch_assoc($result)) {
                     <button class="btn btn-outline-success" data-toggle="modal" data-target="#addModal">
                         <i class="fa-solid fa-plus"></i>
                     </button>
-
                 </div>
             </div>
-
         </div>
         <table class="table table-striped table-bordered table-hover">
             <thead class="thead-dark text-center">
                 <tr>
                     <th>Deduction Name</th>
-                    <th>Deduction Percentage</th>
+                    <th>Deduction Amount</th>
+                    <th>Deduction Method</th>
                     <th>Actions</th>
-
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($deductionData as $deduction) { ?>
-                    <tr>
-                        <td>
-                            <?php echo $deduction['deduction_name']; ?>
-                        </td>
-                        <td>
-    <?php echo number_format($deduction['deduction_amount'] * 100, 2) . '%'; ?>
-</td>
-
-                        <td class="text-center">
-                            <button class="btn btn-primary btn-sm edit-btn" data-toggle="modal" data-target="#editModal"
-                                data-deduction-id="<?php echo $deduction['deduction_id']; ?>"
-                                data-deduction-name="<?php echo $deduction['deduction_name']; ?>"
-                                data-deduction-amount="<?php echo $deduction['deduction_amount']; ?>">
-                                Edit
-                            </button>
-                            <a href="delete_deduction.php?deduction_id=<?php echo $deduction['deduction_id']; ?>"
-                                class="btn btn-danger btn-sm"
-                                onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>
-
-                        </td>
-                    </tr>
-                <?php } ?>
+                        <tr>
+                            <td>
+                                <?php echo $deduction['deduction_name']; ?>
+                            </td>
+                            <td>
+                                <?php
+                                if ($deduction['deduction_method'] === 'percentage') {
+                                    echo number_format($deduction['deduction_amount'] * 100, 2) . '%';
+                                } else {
+                                    echo $deduction['deduction_amount'];
+                                }
+                                ?>
+                            </td>
+                            <td>
+                                <?php echo $deduction['deduction_method']; ?>
+                            </td>
+                            <td class="text-center">
+                                <button class="btn btn-primary btn-sm edit-btn" data-toggle="modal" data-target="#editModal"
+                                    data-deduction-id="<?php echo $deduction['deduction_id']; ?>"
+                                    data-deduction-name="<?php echo $deduction['deduction_name']; ?>"
+                                    data-deduction-amount="<?php echo $deduction['deduction_amount']; ?>"
+                                    data-deduction-method="<?php echo $deduction['deduction_method']; ?>">
+                                    Edit
+                                </button>
+                                <a href="delete_deduction.php?deduction_id=<?php echo $deduction['deduction_id']; ?>"
+                                    class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>
+                            </td>
+                        </tr>
+                    <?php } ?>
             </tbody>
         </table>
     </div>
     <!-- Include jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-
+    <!-- Include add and edit deduction modals -->
     <?php include 'adddeductionmodal.php'; 
     include 'editdeductmodal.php';?>
-<script>
-    $(document).ready(function () {
-        $('.edit-btn').click(function () {
-            var deductionId = $(this).data('deduction-id');
-            var deductionName = $(this).data('deduction-name');
-            var deductionAmount = $(this).data('deduction-amount');
-            
-            $('#editModal input[name="deduction_id"]').val(deductionId);
-            $('#editModal input[name="deduction_name"]').val(deductionName);
-            $('#editModal input[name="deduction_amount"]').val(deductionAmount);
-        });
-    });
-    $(document).ready(function () {
-        $('#editDeductionBtn').click(function () {
-            $('#editDeductionForm').submit();
-        });
-    });
-</script>
 
+    <script>
+        $(document).ready(function () {
+            $('.edit-btn').click(function () {
+                var deductionId = $(this).data('deduction-id');
+                var deductionName = $(this).data('deduction-name');
+                var deductionAmount = $(this).data('deduction-amount');
+                var deductionMethod = $(this).data('deduction-method');
+
+                $('#editModal input[name="deduction_id"]').val(deductionId);
+                $('#editModal input[name="deduction_name"]').val(deductionName);
+                $('#editModal input[name="deduction_amount"]').val(deductionAmount);
+                $('#editModal select[name="deduction_method"]').val(deductionMethod);
+            });
+        });
+        $(document).ready(function () {
+            $('#editDeductionBtn').click(function () {
+                $('#editDeductionForm').submit();
+            });
+        });
+    </script>
 
     <!-- Include Bootstrap JS (for any required functionality) -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

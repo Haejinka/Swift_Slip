@@ -19,12 +19,19 @@
                         <label for="deduction_amount">Deduction Amount</label>
                         <input type="text" class="form-control" name="deduction_amount" required>
                     </div>
+                    <div class="form-group">
+                        <label for="deduction_method">Deduction Method</label>
+                        <select class="form-control" id="deduction_method" name="deduction_method" required>
+                            <option value="percentage">Percentage</option>
+                            <option value="fixed">Fixed</option>
+                        </select>
+                    </div>
                 </form>
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="editDeductionBtn" >Save Changes</button>
+                <button type="button" class="btn btn-primary" id="editDeductionBtn">Save Changes</button>
             </div>
         </div>
     </div>
