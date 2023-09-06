@@ -77,18 +77,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['employee_id'])) {
     </div>
     
     <div class="form-group">
-    <label for="deduction_id">Deduction:</label>
-    <select class="form-control" name="deduction_id">
-        <?php
-        $deductionQuery = "SELECT * FROM deductions";
-        $deductionResult = mysqli_query($con, $deductionQuery);
+    <label>Deductions:</label>
+    <?php
+    $selectedDeductions = explode(',', $employee['deduction_id']);
+    $deductionQuery = "SELECT * FROM deductions";
+    $deductionResult = mysqli_query($con, $deductionQuery);
 
-        while ($deduction = mysqli_fetch_assoc($deductionResult)) {
-            echo '<option value="' . $deduction['deduction_id'] . '" ' . ($employee['deduction_id'] == $deduction['deduction_id'] ? 'selected' : '') . '>' . $deduction['deduction_name'] . '</option>';
-        }
-        ?>
-    </select>
+    while ($deduction = mysqli_fetch_assoc($deductionResult)) {
+        echo '<div class="form-check">';
+        echo '<input type="checkbox" class="form-check-input" id="deduction_' . $deduction['deduction_id'] . '" name="deduction_id[]" value="' . $deduction['deduction_id'] . '" ' . (in_array($deduction['deduction_id'], $selectedDeductions) ? 'checked' : '') . '>';
+        echo '<label class="form-check-label" for="deduction_' . $deduction['deduction_id'] . '">' . $deduction['deduction_name'] . '</label>';
+        echo '</div>';
+    }
+    ?>
 </div>
+
 
     
     <button type="submit" class="btn btn-primary">Save Changes</button>

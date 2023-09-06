@@ -9,10 +9,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $positionId = $_POST['position_id'];
     $departmentId = $_POST['department_id'];
     $jobStatusId = $_POST['jobstatus_id'];
-    $deductionId = $_POST['deduction_id']; // New line
+    $deductionIds = $_POST['deduction_id']; // Updated to an array
+
+    // Convert the array of deduction IDs to a comma-separated string
+    $deductionId = implode(',', $deductionIds);
 
     // Update the database
-    $updateQuery = "UPDATE employee SET first_name = '$firstName', last_name = '$lastName', hire_date = '$hireDate', position_id = $positionId, department_id = $departmentId, jobstatus_id = $jobStatusId, deduction_id = $deductionId WHERE employee_id = $employeeId";
+    $updateQuery = "UPDATE employee SET first_name = '$firstName', last_name = '$lastName', hire_date = '$hireDate', position_id = $positionId, department_id = $departmentId, jobstatus_id = $jobStatusId, deduction_id = '$deductionId' WHERE employee_id = $employeeId";
     $updateResult = mysqli_query($con, $updateQuery);
 
     if ($updateResult) {

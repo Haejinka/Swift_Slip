@@ -1,30 +1,36 @@
 <?php
+// Include necessary files and establish a database connection
 include '../nav/nav_bar.php';
 include '../connect.php';
 
+// Retrieve the search term (if provided) from the URL query parameters
 $searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
 
-// Fetch data from the database with the applied search filter
-$query = "SELECT e.*, d.department_name, jp.position_name, js.jobstatus_name
+// Construct the SQL query to fetch employee data with deductions
+$query = "SELECT e.*, d.department_name, jp.position_name, js.jobstatus_name, GROUP_CONCAT(DISTINCT ded.deduction_name SEPARATOR ', ') AS deduction_names
           FROM employee e
           LEFT JOIN department d ON e.department_id = d.department_id
           LEFT JOIN jobposition jp ON e.position_id = jp.position_id
-          LEFT JOIN jobstatus js ON e.jobstatus_id = js.jobstatus_id";
+          LEFT JOIN jobstatus js ON e.jobstatus_id = js.jobstatus_id
+          LEFT JOIN deductions ded ON FIND_IN_SET(ded.deduction_id, e.deduction_id)
+          GROUP BY e.employee_id";
 
+// Add a search filter to the query if a search term is provided
 if (!empty($searchTerm)) {
     $query .= " WHERE e.employee_id LIKE '%$searchTerm%' OR e.first_name LIKE '%$searchTerm%' OR e.last_name LIKE '%$searchTerm%' OR e.hire_date LIKE '%$searchTerm%' OR jp.position_name LIKE '%$searchTerm%' OR d.department_name LIKE '%$searchTerm%' OR js.jobstatus_name LIKE '%$searchTerm%'";
 }
 
+// Execute the SQL query to fetch employee data with deductions
 $result = mysqli_query($con, $query);
 
-// Initialize an empty array to store the fetched data
+// Initialize an empty array to store the fetched employee data
 $employeeData = array();
 
+// Fetch employee data and store it in the $employeeData array
 while ($row = mysqli_fetch_assoc($result)) {
     $employeeData[] = $row;
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -59,8 +65,6 @@ while ($row = mysqli_fetch_assoc($result)) {
                     </button>
                 </div>
             </div>
-
-
         </div>
         <table class="table table-striped table-bordered table-hover">
             <thead class="thead-dark text-center">
@@ -71,7 +75,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                     <th>Hire Date</th>
                     <th>Position ID</th>
                     <th>Department ID</th>
-                    <th>Deduction ID</th>
+                    <th>Deduction ID</th> 
                     <th>Job Status ID</th>
                     <th>Actions</th>
                 </tr>
@@ -97,9 +101,8 @@ while ($row = mysqli_fetch_assoc($result)) {
                         <td>
                             <?php echo $employee['department_name']; ?>
                         </td>
-                        
                         <td>
-                        <?php echo $employee['deduction_id']; ?>
+                            <?php echo $employee['deduction_names']; ?> 
                         </td>
                         <td>
                             <?php echo $employee['jobstatus_name']; ?>
@@ -107,7 +110,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                         <td class="text-center">
                             <a href="#" class="btn btn-primary btn-sm edit-btn" data-toggle="modal" data-target="#editModal"
                                 data-employee-id="<?php echo $employee['employee_id']; ?>">Edit</a>
-                                <a href="delete_employee.php?employee_id=<?php echo $employee['employee_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this employee?')">Delete</a>
+                            <a href="delete_employee.php?employee_id=<?php echo $employee['employee_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this employee?')">Delete</a>
                         </td>
                     </tr>
                 <?php } ?>
@@ -121,6 +124,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
+            // Load edit modal content when clicking on the edit button
             $('.edit-btn').click(function () {
                 var employeeId = $(this).data('employee-id');
                 $('#editModal .modal-body').load('edit_employee_modal.php?employee_id=' + employeeId);

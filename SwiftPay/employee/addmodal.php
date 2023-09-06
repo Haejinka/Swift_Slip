@@ -85,17 +85,23 @@ while ($deductionRow = mysqli_fetch_assoc($deductionResult)) {
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="deduction_id">Deduction</label>
-                        <select class="form-control" id="deduction_id" name="deduction_id[]" required multiple>
-                            <option value="">Select Deduction</option>
-                            <?php foreach ($deductions as $deduction) { ?>
-                                <option value="<?php echo $deduction['deduction_id']; ?>">
-                                    <?php echo $deduction['deduction_name'] . ' ($' . $deduction['deduction_amount'] . ')'; ?>
-                                </option>
-                                
-                            <?php } ?>
-                        </select>
+                        <label for="deduction_id">Deductions</label>
+                        <?php foreach ($deductions as $deduction) { ?>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input"
+                                    id="deduction_<?php echo $deduction['deduction_id']; ?>" name="deduction_id[]"
+                                    value="<?php echo $deduction['deduction_id']; ?>">
+                                <label class="form-check-label" for="deduction_<?php echo $deduction['deduction_id']; ?>">
+
+                                    <?php
+                                    $deductionAmount = $deduction['deduction_amount'] * 100; //multiply by 100 before displaying
+                                    echo $deduction['deduction_name'] . ' (' . $deductionAmount . '%)'; //display with % sign
+                                    ?>
+                                </label>
+                            </div>
+                        <?php } ?>
                     </div>
+
                     <div class="form-group">
                         <label for="password">Password</label>
                         <input type="password" class="form-control" id="password" name="password" required>
