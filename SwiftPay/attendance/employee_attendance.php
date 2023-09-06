@@ -38,6 +38,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    // Determine the day of the month
+    $dayOfMonth = date('j');
+
+    // Define the pay term boundaries (you can adjust these as needed)
+    $firstHalfBoundary = 15; // Example: First half of the month ends on the 15th
+    $secondHalfBoundary = 31; // Example: Second half of the month ends on the 31st
+
+    $payTerm = '';
+
+    if ($dayOfMonth <= $firstHalfBoundary) {
+        $payTerm = 'First Half';
+    } elseif ($dayOfMonth <= $secondHalfBoundary) {
+        $payTerm = 'Second Half';
+    } else {
+        $payTerm = 'Out of Range';
+    }
+
     if (isset($_POST['time_in'])) {
         // Check if the employee has already timed in today
         $existingTimeInQuery = "SELECT * FROM attendance WHERE employee_id = ? AND date = ?";
@@ -52,15 +69,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Handle Time In button click
             $checkInTime = date('Y-m-d H:i:s'); // Current timestamp
 
-            // Insert data into the database for Time In (include date)
-            $insertQuery = "INSERT INTO attendance (employee_id, time_in, date) VALUES (?, ?, ?)";
+            // Insert data into the database for Time In (include date and pay_term)
+            $insertQuery = "INSERT INTO attendance (employee_id, time_in, date, pay_term) VALUES (?, ?, ?, ?)";
             $stmt = mysqli_prepare($con, $insertQuery);
-            mysqli_stmt_bind_param($stmt, "iss", $employeeID, $checkInTime, $currentDate);
+            mysqli_stmt_bind_param($stmt, "isss", $employeeID, $checkInTime, $currentDate, $payTerm);
             $insertResult = mysqli_stmt_execute($stmt);
 
             if ($insertResult) {
                 // Time In recorded successfully, display message
-                echo '<script>alert("Time In recorded successfully.");</script>';
+                echo '<script>alert("Time In recorded successfully for ' . $payTerm . ' pay term.");</script>';
             } else {
                 echo "Error recording Time In.";
             }

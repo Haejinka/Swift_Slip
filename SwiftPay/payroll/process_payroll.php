@@ -3,7 +3,7 @@ include '../connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $employeeId = $_POST['employee_id'];
-    $payTerm = $_POST['pay_term'];  // Changed from $_POST['pay_date']
+    $payTerm = $_POST['pay_term'];  
     $deductionId = $_POST['deduction_id'];
 
     // Check if employee_id exists in employee table
