@@ -1,4 +1,3 @@
-
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -17,6 +16,13 @@
                     <div class="form-group">
                         <label for="deductionAmount">Deduction Amount</label>
                         <input type="number" class="form-control" id="deductionAmount" name="deduction_amount" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="deductionMethod">Deduction Method</label>
+                        <select class="form-control" id="deductionMethod" name="deduction_method" required>
+                            <option value="percentage">Percentage</option>
+                            <option value="fixed">Fixed</option>
+                        </select>
                     </div>
                     <button type="submit" class="btn btn-primary">Add Deduction</button>
                 </form>
