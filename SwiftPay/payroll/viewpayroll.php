@@ -111,7 +111,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <td><?php echo $row['payroll_id']; ?></td>
                 <td><?php echo $row['employee_id']; ?></td>
                 <td><?php echo $row['pay_term']; ?></td>
-                <td><?php echo $row['total_percentage_deduction'] . '%'; ?></td>
+                <td><?php echo ($row['total_percentage_deduction'] * 100). '%'; ?></td>
                 <td><?php echo $row['total_fixed_deduction']; ?></td>
                 <td><?php echo $row['hours_worked']; ?></td>
                 <td><?php echo $row['hourly_rate']; ?></td>
