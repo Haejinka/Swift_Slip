@@ -8,10 +8,14 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post" action="add_attendance.php">
+                <form method="post" action="add_att_process.php">
                     <div class="form-group">
                         <label for="employee_id">Employee ID:</label>
                         <input type="text" class="form-control" id="employee_id" name="employee_id" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date:</label>
+                        <input type="date" class="form-control" id="date" name="date" required>
                     </div>
                     <div class="form-group">
                         <label for="time_in">Time In:</label>
@@ -23,7 +27,6 @@
                     </div>
                     <!-- Add more fields if needed -->
                     <button type="submit" class="btn btn-primary">Add Attendance</button>
-                    
                 </form>
                 <div id="responseMessage"></div> <!-- Display response message here -->
             </div>
@@ -33,8 +36,3 @@
         </div>
     </div>
 </div>
-
-
-
-
-

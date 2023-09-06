@@ -1,43 +1,39 @@
 <?php
 include '../connect.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $employeeID = $_POST['employee_id'];
-    $checkInTime = $_POST['check_in_time'];
-    $checkOutTime = $_POST['check_out_time'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Get form data
+    $employee_id = $_POST["employee_id"];
+    $date = $_POST["date"];
+    $time_in = $_POST["time_in"];
+    $time_out = $_POST["time_out"];
 
-    $checkEmployeeQuery = "SELECT * FROM employee WHERE employee_id = $employeeID";
-    $checkEmployeeResult = mysqli_query($con, $checkEmployeeQuery);
+    // Calculate hours worked
+    $hours_worked = (strtotime($time_out) - strtotime($time_in)) / 3600;
 
-    if (mysqli_num_rows($checkEmployeeResult) == 0) {
-        echo "<center>Employee does not exist.";
-        exit(); // Stop further processing
-    }
-
-    // Check if both check-in and check-out times are provided and not empty
-    if (!empty($checkInTime) && !empty($checkOutTime)) {
-        // Calculate hours worked
-        $startTime = strtotime($checkInTime);
-        $endTime = strtotime($checkOutTime);
-        $secondsWorked = $endTime - $startTime;
-        $hoursWorked = $secondsWorked / 3600;
-    }
-
-    // Use an UPDATE statement to set hours_worked directly
-    $updateQuery = "UPDATE attendance SET hours_worked = ? WHERE employee_id = ? AND time_in = ?";
-    $stmt = mysqli_prepare($con, $updateQuery);
-
-    // Bind parameters
-    mysqli_stmt_bind_param($stmt, "dis", $hoursWorked, $employeeID, $checkInTime);
-
-    // Execute the prepared statement
-    $updateResult = mysqli_stmt_execute($stmt);
-
-    if ($updateResult) {
-        header("Location: employee_attendance.php"); // Redirect back to the attendance list
-        exit();
+    // Calculate pay term based on the date
+    $day_of_month = date("j", strtotime($date));
+    $last_day_of_month = date("t", strtotime($date));
+    
+    if ($day_of_month <= 15 || ($day_of_month == $last_day_of_month && $day_of_month >= 16)) {
+        $pay_term = "First Half";
     } else {
-        echo "Error updating attendance: " . mysqli_error($con);
+        $pay_term = "Second Half";
     }
+
+    // SQL query to insert data into the attendance table
+    $sql = "INSERT INTO `attendance` (`employee_id`, `date`, `pay_term`, `time_in`, `time_out`, `hours_worked`) 
+            VALUES ('$employee_id', '$date', '$pay_term', '$time_in', '$time_out', '$hours_worked')";
+
+    if (mysqli_query($con, $sql)) {
+        // Redirect to employee_attendance.php
+        header("Location: viewattendance.php");
+        exit(); // Stop script execution to ensure the redirect works
+    } else {
+        echo "Error: " . mysqli_error($connection);
+    }
+
+    // Close the database connection if needed
+    // mysqli_close($connection);
 }
 ?>
