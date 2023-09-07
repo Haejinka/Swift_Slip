@@ -30,10 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: viewattendance.php");
         exit(); // Stop script execution to ensure the redirect works
     } else {
-        echo "Error: " . mysqli_error($connection);
+        echo "Error: " .mysqli_error($con);
     }
-
-    // Close the database connection if needed
-    // mysqli_close($connection);
 }
 ?>

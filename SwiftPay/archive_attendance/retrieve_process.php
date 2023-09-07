@@ -13,7 +13,7 @@ if (isset($_GET['attendance_id'])) {
         $attendanceData = mysqli_fetch_assoc($result);
 
         // Insert the attendance record into the archive table
-        $archiveQuery = "INSERT INTO attendance (employee_id, time_in, time_out, hours_worked) VALUES ('{$attendanceData['employee_id']}', '{$attendanceData['time_in']}', '{$attendanceData['time_out']}', '{$attendanceData['hours_worked']}')";
+        $archiveQuery = "INSERT INTO attendance (employee_id,pay_term,date, time_in, time_out, hours_worked) VALUES ('{$attendanceData['employee_id']}','{$attendanceData['pay_term']}' ,'{$attendanceData['date']}','{$attendanceData['time_in']}', '{$attendanceData['time_out']}', '{$attendanceData['hours_worked']}')";
         $archiveResult = mysqli_query($con, $archiveQuery);
 
         if ($archiveResult) {
