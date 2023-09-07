@@ -118,7 +118,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <td><?php echo $row['gross_pay']; ?></td>
                 <td><?php echo $row['net_pay']; ?></td>
                 <td class="text-center">
-                    <a href="archive_payroll.php?payroll_id=<?php echo $row['payroll_id']; ?>" class="btn btn-danger btn-sm">Archive</a>
+                    <a href="archive_payroll_process.php?payroll_id=<?php echo $row['payroll_id']; ?>" class="btn btn-danger btn-sm">Archive</a>
                 </td>
             </tr>
             <?php } ?>

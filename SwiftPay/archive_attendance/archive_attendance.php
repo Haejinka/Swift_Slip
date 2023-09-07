@@ -48,7 +48,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-9">
-                <h1>Attendance List</h1>
+                <h1>Attendance Archive List</h1>
             </div>
             <div class="col-md-4">
                 <div class="d-flex">
@@ -73,6 +73,8 @@ while ($row = mysqli_fetch_assoc($result)) {
             <thead class="thead-dark text-center">
                 <tr>
                     <th>Employee ID</th>
+                    <th>PayTerm</th>
+                    <th>Date</th>
                     <th>Time In</th>
                     <th>Time Out</th>
                     <th>Hours Worked</th>
@@ -84,6 +86,12 @@ while ($row = mysqli_fetch_assoc($result)) {
                     <tr>
                         <td>
                             <?php echo $attendance['employee_id']; ?>
+                        </td>
+                        <td>
+                            <?php echo $attendance['pay_term']; ?>
+                        </td>
+                        <td>
+                            <?php echo $attendance['date']; ?>
                         </td>
                         <td>
                             <?php echo $attendance['time_in']; ?>

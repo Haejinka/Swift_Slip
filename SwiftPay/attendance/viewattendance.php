@@ -85,6 +85,7 @@ function calculateHoursWorked($timeIn, $timeOut) {
             <thead class="thead-dark text-center">
                 <tr>
                     <th>Employee ID</th>
+                    <th>PayTerm</th>
                     <th>Time In</th>
                     <th>Time Out</th>
                     <th>Hours Worked</th>
@@ -96,6 +97,9 @@ function calculateHoursWorked($timeIn, $timeOut) {
                     <tr>
                         <td>
                             <?php echo $attendance['employee_id']; ?>
+                        </td>
+                        <td>
+                            <?php echo $attendance['pay_term']; ?>
                         </td>
                         <td>
                             <?php echo $attendance['time_in']; ?>
