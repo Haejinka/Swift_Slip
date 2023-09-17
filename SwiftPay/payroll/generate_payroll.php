@@ -39,17 +39,24 @@ SET p.`hours_worked` = a.`total_hours_worked`
         p.net_pay = (p.hours_worked * p.hourly_rate) - p.total_deduct_f - (p.hours_worked * p.hourly_rate * p.total_deduct_p)
 ";
 
+// Update total_deduct
+$updateTotalDeductQuery = "
+    UPDATE payroll p
+    SET p.total_deduct = p.gross_pay - p.net_pay
+";
+
   // Execute the queries
-  if (
-    $con->query($updateHoursQuery) === TRUE &&
-    $con->query($updateHourlyRateQuery) === TRUE &&
-    $con->query($updateGrossNetQuery) === TRUE
-  ) {
-    // Redirect to viewpayroll.php
-    header("Location: viewpayroll.php");
-    exit;
-  } else {
-    echo "Error generating payroll: ";
-  }
+if (
+  $con->query($updateHoursQuery) === TRUE &&
+  $con->query($updateHourlyRateQuery) === TRUE &&
+  $con->query($updateGrossNetQuery) === TRUE &&
+  $con->query($updateTotalDeductQuery) === TRUE
+) {
+  // Redirect to viewpayroll.php
+  header("Location: viewpayroll.php");
+  exit;
+} else {
+  echo "Error generating payroll: ";
+}
 }
 ?>

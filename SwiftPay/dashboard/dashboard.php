@@ -1,6 +1,7 @@
 <?php
-// Start the session
-session_start();
+// Include necessary files
+include '../nav/nav_bar.php';
+include '../connect.php';
 
 // Redirect to the login page if the user is not authenticated
 if (!isset($_SESSION['username'])) {
@@ -8,9 +9,9 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-// Include necessary files
-include '../nav/nav_bar.php';
-include '../connect.php';
+
+
+
 
 // Query to get the total number of employees
 $employeequery = "SELECT COUNT(*) as count FROM employee";

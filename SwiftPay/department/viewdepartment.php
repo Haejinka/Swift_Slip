@@ -1,4 +1,5 @@
 <?php include '../nav/nav_bar.php';
+
 // Include the database connection
 include '../connect.php';
 

@@ -9,9 +9,9 @@ if (isset($_GET['payroll_id'])) {
     $result = mysqli_query($con, $selectQuery);
 
     if ($row = mysqli_fetch_assoc($result)) {
-        // Insert the payroll record into the archive_payroll table
+        // Insert the payroll record into the archive_payroll table with total_deduct
         $insertQuery = "
-            INSERT INTO archive_payroll (payroll_id, employee_id, pay_term, hours_worked, hourly_rate, net_pay, gross_pay, total_deduct_p, total_deduct_f)
+            INSERT INTO archive_payroll (payroll_id, employee_id, pay_term, hours_worked, hourly_rate, net_pay, gross_pay, total_deduct_p, total_deduct_f, total_deduct)
             VALUES (
                 '{$row['payroll_id']}',
                 '{$row['employee_id']}',
@@ -21,7 +21,8 @@ if (isset($_GET['payroll_id'])) {
                 '{$row['net_pay']}',
                 '{$row['gross_pay']}',
                 '{$row['total_deduct_p']}',
-                '{$row['total_deduct_f']}'
+                '{$row['total_deduct_f']}',
+                '{$row['total_deduct']}'
             )
         ";
         mysqli_query($con, $insertQuery);

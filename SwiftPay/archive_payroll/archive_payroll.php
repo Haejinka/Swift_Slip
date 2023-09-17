@@ -50,8 +50,7 @@ $result = mysqli_query($con, $query);
                 <th>Payroll ID</th>
                 <th>Employee ID</th>
                 <th>Pay Term</th>
-                <th>Total Deduction (%)</th>
-                <th>Total Fixed Deduction</th>
+                <th>Total Deduction Amount</th>
                 <th>Hours Worked</th>
                 <th>Hourly Rate</th>
                 <th>Gross Pay</th>
@@ -64,11 +63,10 @@ $result = mysqli_query($con, $query);
             while ($row = mysqli_fetch_assoc($result)) {
             ?>
             <tr>
-                <td><?php echo $row['payroll_id']; ?></td>
+            <td><?php echo $row['payroll_id']; ?></td>
                 <td><?php echo $row['employee_id']; ?></td>
                 <td><?php echo $row['pay_term']; ?></td>
-                <td><?php echo ($row['total_deduct_p'] * 100). '%'; ?></td>
-                <td><?php echo $row['total_deduct_f']; ?></td>
+                <td><?php echo $row['total_deduct']; ?></td>
                 <td><?php echo $row['hours_worked']; ?></td>
                 <td><?php echo $row['hourly_rate']; ?></td>
                 <td><?php echo $row['gross_pay']; ?></td>

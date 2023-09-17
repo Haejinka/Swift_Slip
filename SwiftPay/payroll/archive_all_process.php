@@ -8,7 +8,7 @@ $result = mysqli_query($con, $selectQuery);
 while ($row = mysqli_fetch_assoc($result)) {
     // Insert each payroll record into the archive_payroll table
     $insertQuery = "
-        INSERT INTO archive_payroll (payroll_id, employee_id, pay_term, hours_worked, hourly_rate, net_pay, gross_pay, total_deduct_p, total_deduct_f)
+        INSERT INTO archive_payroll (payroll_id, employee_id, pay_term, hours_worked, hourly_rate, net_pay, gross_pay, total_deduct_p, total_deduct_f,total_deduct)
         VALUES (
             '{$row['payroll_id']}',
             '{$row['employee_id']}',
@@ -18,7 +18,9 @@ while ($row = mysqli_fetch_assoc($result)) {
             '{$row['net_pay']}',
             '{$row['gross_pay']}',
             '{$row['total_deduct_p']}',
+            '{$row['total_deduct']}',
             '{$row['total_deduct_f']}'
+            
         )
     ";
     mysqli_query($con, $insertQuery);
