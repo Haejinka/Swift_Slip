@@ -72,9 +72,9 @@ function calculateHoursWorked($timeIn, $timeOut) {
                             </div>
                         </div>
                     </form>
-                    <button class="btn btn-outline-success mr-2" data-toggle="modal" data-target="#addAttendanceModal">
+                    <!-- <button class="btn btn-outline-success mr-2" data-toggle="modal" data-target="#addAttendanceModal">
                         <i class="fa-solid fa-plus"></i>
-                    </button>
+                    </button> -->
                     <a href="archive_all_attendance_process.php" class="btn btn-outline-primary">
                         <i class="fa-solid fa-archive"></i> Archive All
                     </a>

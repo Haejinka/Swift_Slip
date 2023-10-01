@@ -141,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h2>Add Attendance</h2>
             <form action="" method="post">
                 <label for="employee_id">Employee ID:</label>
-                <input type="text" name="employee_id" id="employee_id" required>
+                <input type="text" name="employee_id" id="employee_id" readonly value="<?php echo $_SESSION['username']; ?>">
 
                 <label for="check_in_time">Check In Time:</label>
                 <input type="hidden" id="check_in_time" name="check_in_time">

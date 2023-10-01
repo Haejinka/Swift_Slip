@@ -8,6 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $position_id = $_POST["position_id"];
     $department_id = $_POST["department_id"];
     $jobstatus_id = $_POST["jobstatus_id"];
+    $email = $_POST["email"];
     $password = $_POST["password"];
     $deduction_ids = $_POST["deduction_id"]; // New deduction field (assuming it's an array)
 
@@ -15,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $deduction_id = implode(',', $deduction_ids);
 
     // Perform the database insert operation
-    $insertEmployeeQuery = "INSERT INTO employee (first_name, last_name, hire_date, position_id, department_id, jobstatus_id, password, deduction_id) VALUES ('$first_name', '$last_name', '$hire_date', '$position_id', '$department_id', '$jobstatus_id', '$password', '$deduction_id')";
+    $insertEmployeeQuery = "INSERT INTO employee (first_name, last_name, hire_date, position_id, department_id, jobstatus_id, password, deduction_id,email) VALUES ('$first_name', '$last_name', '$hire_date', '$position_id', '$department_id', '$jobstatus_id', '$password', '$deduction_id','$email')";
 
     if (mysqli_query($con, $insertEmployeeQuery)) {
         // Redirect back to the employee list page

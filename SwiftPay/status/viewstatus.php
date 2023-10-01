@@ -52,9 +52,9 @@ while ($row = mysqli_fetch_assoc($result)) {
                             </div>
                         </div>
                     </form>
-                    <button class="btn btn-outline-success mr-2" data-toggle="modal" data-target="#addModal">
+                    <!-- <button class="btn btn-outline-success mr-2" data-toggle="modal" data-target="#addModal">
                         <i class="fa-solid fa-plus"></i>
-                    </button>
+                    </button> -->
                 </div>
             </div>
         </div>
@@ -80,8 +80,8 @@ while ($row = mysqli_fetch_assoc($result)) {
                                 data-deduction-id="<?php echo $status['jobstatus_id']; ?>"
                                 data-deduction-name="<?php echo $status['jobstatus_name']; ?>"
                                 >Edit</a>
-                            <a href="delete_jobstatus.php?jobstatus_id=<?php echo $status['jobstatus_id']; ?>"
-                                class="btn btn-danger btn-sm">Delete</a>
+                            <!-- <a href="delete_jobstatus.php?jobstatus_id=<?php echo $status['jobstatus_id']; ?>"
+                                class="btn btn-danger btn-sm">Delete</a> -->
                         </td>
                     </tr>
                 <?php } ?>
