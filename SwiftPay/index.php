@@ -3,6 +3,7 @@
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="indexStyle/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
@@ -17,7 +18,7 @@
                 <div class="row">
                   <div class="col-md-9 col-lg-8 mx-auto">
                     <h3 class="login-heading mb-4">Welcome back!</h3>
-      
+
                     <!-- Sign In Form -->
                     <form action="loginLogic/login.php" method="post">
                       <div class="form-floating mb-3">
@@ -28,11 +29,16 @@
                         <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password" required>
                         <label for="floatingPassword">Password</label>
                       </div>
-      
+
                       <div class="d-grid">
                         <button class="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2" type="submit">Sign in</button>
                       </div>
                     </form>
+                    <!-- Icons for Instructions and About Us at the bottom -->
+      <div class="footer-icons">
+        <a href="indexInfo/instructions.html"><i class="fas fa-info-circle"></i> Instructions</a>
+        <a href="indexInfo/aboutus.html"><i class="fas fa-users"></i> About Us</a>
+      </div>
                   </div>
                 </div>
               </div>

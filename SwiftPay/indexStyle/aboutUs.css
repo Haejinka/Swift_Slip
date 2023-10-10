@@ -1,0 +1,58 @@
+/* Custom styles for the About Us page */
+body{
+    background-color: aqua;
+}
+p{
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+
+}
+.container {
+    padding: 50px;
+}
+
+h1 {
+    color: #333;
+}
+
+p {
+    color: #555;
+}
+
+.developer-card {
+    text-align: center;
+    margin-bottom: 30px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.developer-card img {
+    max-width: 100%;
+    border-radius: 50%;
+}
+
+.social-icons a {
+    text-decoration: none;
+    color: #333;
+    margin-right: 10px;
+    font-size: 24px;
+}
+
+.social-icons a:hover {
+    color: #0077B5; /* LinkedIn color */
+}
+
+/* Customize the icon colors */
+.fab.fa-github {
+    color: #333;
+}
+
+.fab.fa-instagram {
+    color: #e4405f; /* Instagram color */
+}
+
+.fab.fa-facebook {
+    color: #1877f2; /* Facebook color */
+}
