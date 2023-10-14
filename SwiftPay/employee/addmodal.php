@@ -85,15 +85,14 @@ while ($deductionRow = mysqli_fetch_assoc($deductionResult)) {
                         </select>
                     </div>
                     <div class="form-group">
-    <label for="deduction_id">Deductions</label>
-    <?php foreach ($deductions as $deduction) { ?>
+                        <label for="deduction_id">Deductions</label>
+                        <?php foreach ($deductions as $deduction) { ?>
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="deduction_<?php echo $deduction['deduction_id']; ?>"
                                     name="deduction_id[]" value="<?php echo $deduction['deduction_id']; ?>">
                                 <label class="form-check-label" for="deduction_<?php echo $deduction['deduction_id']; ?>">
                                     <?php
                                     $deductionAmount = $deduction['deduction_amount']; // Assuming deduction amount is a decimal number (e.g., 0.05 for 5%)
-                                
                                     if ($deduction['deduction_method'] === 'fixed') {
                                         // Deduction method is fixed, so no need to multiply by 100
                                         echo $deduction['deduction_name'] . ' (' . $deductionAmount . ')';
@@ -111,10 +110,9 @@ while ($deductionRow = mysqli_fetch_assoc($deductionResult)) {
                         <?php } ?>
                     </div>
                     <div class="form-group">
-                        <label for="password">Email</label>
+                        <label for="email">Email</label>
                         <input type="text" class="form-control" id="email" name="email" required>
                     </div>
-
                     <div class="form-group">
                         <label for="password">Password</label>
                         <input type="password" class="form-control" id="password" name="password" required>
@@ -125,3 +123,5 @@ while ($deductionRow = mysqli_fetch_assoc($deductionResult)) {
         </div>
     </div>
 </div>
+
+
